@@ -1,8 +1,11 @@
+import dotenv from 'dotenv';
+import hospitaisRoutes from './routes/hospitais.routes';
+
 const express = require("express");
 const app = express();
 
-app.get("/", (req, res) => res.send("Express on Vercel"));
+dotenv.config();
 
-app.listen(3001, () => console.log("Server ready on port 3001."));
+app.use('/hospitais', hospitaisRoutes);
 
 module.exports = app;
