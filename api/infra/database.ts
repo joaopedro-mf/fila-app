@@ -1,17 +1,27 @@
 import dotenv from 'dotenv';
-import { DataSource } from "typeorm";
-import { User } from "../domain/entities/User";
+import { UserTable } from "../domain/entities/User";
+import { Pool } from 'pg'
+import { Kysely, PostgresDialect } from 'kysely'
 
 dotenv.config();
 
-export const AppDataSource = new DataSource({
-  type: "postgres",
-  host: process.env.DB_HOST,
-  port: parseInt(process.env.DB_PORT || '5432'),
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: "fila",
-  entities: [__dirname + '/../domain/entities/*.{js,ts}'],
-  synchronize: true,
-  logging: true,
-});
+export interface dbInterface {
+  User: UserTable
+}
+
+const dialect = new PostgresDialect({
+  pool: new Pool({
+    database: 'fila',
+    host: process.env.DB_HOST,
+    password: process.env.DB_PASSWORD,
+    user:  process.env.DB_USER,
+    port: parseInt(process.env.DB_PORT || '5432'),
+    max: 10,
+    ssl: true
+  })
+})
+
+
+export const db = new Kysely<dbInterface>({
+  dialect,
+})

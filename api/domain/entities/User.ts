@@ -1,16 +1,24 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import {
+    ColumnType,
+    Generated,
+    Insertable,
+    JSONColumnType,
+    Selectable,
+    Updateable,
+  } from 'kysely'
 
-@Entity()
-export class User {
-    @PrimaryGeneratedColumn()
-    id: number
 
-    @Column()
-    firstName: string
+export interface UserTable {
 
-    @Column()
-    lastName: string
+    id: Generated<number>
+  
+    first_name: string
 
-    @Column()
-    email: string
-}
+    last_name: string 
+
+    email: string 
+  }
+
+  export type User = Selectable<UserTable>
+  export type NewUser = Insertable<UserTable>
+  export type UserUpdate = Updateable<UserTable>

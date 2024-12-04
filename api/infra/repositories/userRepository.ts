@@ -1,33 +1,53 @@
-import { Repository } from "typeorm";
-import { User } from "../../domain/entities/User";
-import { AppDataSource } from "../database";
+import { User, NewUser, UserUpdate } from "../../domain/entities/User";
+import { db, dbInterface } from "../database";
+import { Kysely } from 'kysely'
 
-export class UserService {
-  private userRepository: Repository<User>;
+export class UserRepository {
+  
+  private _db : Kysely<dbInterface> ;
 
-  constructor() {
-    this.userRepository = AppDataSource.getRepository(User);
+  constructor(){
+    this._db = db;
   }
 
-  async createUser(userData: Partial<User>): Promise<User> {
-    const user = this.userRepository.create(userData);
-    return await this.userRepository.save(user);
+  async getUserById(id: number) {
+    return await db.selectFrom('User')
+      .where('id', '=', id)
+      .selectAll()
+      .executeTakeFirst()
   }
 
-  async findUserById(id: number): Promise<User | null> {
-    return await this.userRepository.findOneBy({ id });
+  async getUser(criteria: Partial<User>) {
+    let query = this._db.selectFrom('User')
+  
+    if (criteria.id) {
+      query = query.where('id', '=', criteria.id)
+    }
+  
+    return await query.selectAll().execute()
   }
 
-  async updateUser(id: number, userData: Partial<User>): Promise<User | null> {
-    await this.userRepository.update(id, userData);
-    return this.findUserById(id);
+  async getAllUsers() {
+    let query = this._db.selectFrom('User')
+    
+    return await query.selectAll().execute()
   }
 
-  async deleteUser(id: number): Promise<void> {
-    await this.userRepository.delete(id);
+  async updatePerson(id: number, updateWith: UserUpdate) {
+    await db.updateTable('User').set(updateWith).where('id', '=', id).execute()
+  }
+  
+ async createPerson(person: NewUser) {
+  return await db.insertInto('User')
+    .values(person)
+    .returningAll()
+    .executeTakeFirstOrThrow()
+}
+
+  async deletePerson(id: number) {
+    return await db.deleteFrom('User').where('id', '=', id)
+      .returningAll()
+      .executeTakeFirst()
   }
 
-  async getAllUsers(): Promise<User[]> {
-    return await this.userRepository.find();
-  }
 }

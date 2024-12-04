@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
-import { UserService } from "../infra/repositories/userRepository";
+import { UserRepository } from "../infra/repositories/userRepository";
 
 export class UserController {
-  private userService: UserService;
+  private userRepository: UserRepository;
 
   constructor() {
-    this.userService = new UserService();
+    this.userRepository = new UserRepository();
   }
 
   async createUser(req: Request, res: Response): Promise<void> {
     try {
-      const user = await this.userService.createUser(req.body);
+      const user = null//await this.userService.createUser(req.body);
       res.status(201).json(user);
     } catch (error) {
       res.status(500).json({ error: "Erro ao criar usuário" });
@@ -20,7 +20,7 @@ export class UserController {
   async getUser(req: Request, res: Response): Promise<void> {
     try {
       const id = parseInt(req.params.id);
-      const user = await this.userService.findUserById(id);
+      const user = await this.userRepository.getUserById(id);
       if (user) {
         res.json(user);
       } else {
@@ -33,7 +33,7 @@ export class UserController {
 
   async getUsers(req: Request, res: Response): Promise<void> {
     try {
-      const user = await this.userService.getAllUsers();
+      const user = await this.userRepository.getAllUsers();
         res.json(user);  
     } catch (error) {
       console.log(error)
