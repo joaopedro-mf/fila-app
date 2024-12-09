@@ -36,6 +36,7 @@ docker run -d --name postgres-container -p 5432:5432 my-postgres
 utilizaremos a lib da vercel para simular o ambiente da vercel em produção. Rode o comando
 
 ```
+npm run build 
 
 vercel dev
 
