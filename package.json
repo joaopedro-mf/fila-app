@@ -4,6 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon api/index.ts",
+    "build": "rimraf dist && tsc",
+    "ts.check": "tsc --project tsconfig.json",
+    "add-build": "git add dist",
     "test": "echo \"Error: no test specified\" && exit 1",
     "migration": "npx ts-node ./api/infra/migrator.ts"
   },
@@ -16,6 +20,13 @@
     "express": "^4.21.1",
     "kysely": "^0.27.4",
     "pg": "^8.13.1",
+    "pre-commit": "^1.2.2",
+    "rimraf": "^6.0.1",
     "typescript": "^5.7.2"
-  }
+  },
+  "pre-commit": [
+    "ts.check",
+    "build",
+    "add-build"
+  ]
 }
