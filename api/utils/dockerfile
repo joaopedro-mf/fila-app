@@ -1,0 +1,8 @@
+FROM postgres:14
+
+ENV POSTGRES_USER=fila_owner
+ENV POSTGRES_PASSWORD=password@12
+
+EXPOSE 5432
+
+VOLUME ["/var/lib/postgresql/data"]

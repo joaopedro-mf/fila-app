@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
-import { UserRepository } from "../infra/repositories/userRepository";
+import { UsuarioRepository } from "../infra/repositories/usuarioRepositorio";
 
-export class UserController {
-  private userRepository: UserRepository;
+export class UsuarioController {
+  private usuarioRepository: UsuarioRepository;
 
   constructor() {
-    this.userRepository = new UserRepository();
+    this.usuarioRepository = new UsuarioRepository();
   }
 
-  async createUser(req: Request, res: Response): Promise<void> {
+  async createUsuario(req: Request, res: Response): Promise<void> {
     try {
       const user = null//await this.userService.createUser(req.body);
       res.status(201).json(user);
@@ -17,10 +17,10 @@ export class UserController {
     }
   }
 
-  async getUser(req: Request, res: Response): Promise<void> {
+  async getUsuario(req: Request, res: Response): Promise<void> {
     try {
       const id = parseInt(req.params.id);
-      const user = await this.userRepository.getUserById(id);
+      const user = await this.usuarioRepository.getUsuarioById(id);
       if (user) {
         res.json(user);
       } else {
@@ -31,9 +31,9 @@ export class UserController {
     }
   }
 
-  async getUsers(req: Request, res: Response): Promise<void> {
+  async getUsuarios(req: Request, res: Response): Promise<void> {
     try {
-      const user = await this.userRepository.getAllUsers();
+      const user = await this.usuarioRepository.getAllUsuarios();
         res.json(user);  
     } catch (error) {
       console.log(error)
