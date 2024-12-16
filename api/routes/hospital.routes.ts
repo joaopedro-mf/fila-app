@@ -1,8 +1,9 @@
 import { Router } from 'express';
-import { get } from '../controllers/hospital.controller';
+import { HospitalController } from '../controllers/hospital.controller';
 
 const router = Router();
+const hospitalController = new HospitalController();
 
-router.get('/', get);
+router.get("/", hospitalController.getHospitals.bind(hospitalController));
 
 export default router;

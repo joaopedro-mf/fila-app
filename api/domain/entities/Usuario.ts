@@ -17,6 +17,11 @@ import {
     status: string
     ativo: boolean
     operadoraId: number
+    cep: string
+    endereco: string
+    numeroEndereco: string
+    complementoEndereco: string
+    telefone: string
   }
 
   export type Usuario = Selectable<UsuarioTable>

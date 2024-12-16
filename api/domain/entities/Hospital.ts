@@ -14,3 +14,8 @@ import {
     endereco: string
     ativo: boolean
   }
+
+  
+    export type Hospital = Selectable<HospitalTable>
+    export type NewHospital = Insertable<HospitalTable>
+    export type HospitalUpdate = Updateable<HospitalTable>
