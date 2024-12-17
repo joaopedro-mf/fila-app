@@ -13,7 +13,7 @@ export class HospitalController {
       const user = null//await this.userService.createUser(req.body);
       res.status(201).json(user);
     } catch (error) {
-      res.status(500).json({ error: "Erro ao criar usuário" });
+      res.status(500).json({ error: "Erro ao criar hospital" });
     }
   }
 
@@ -24,10 +24,10 @@ export class HospitalController {
       if (user) {
         res.json(user);
       } else {
-        res.status(404).json({ error: "Usuário não encontrado" });
+        res.status(404).json({ error: "Hospital não encontrado" });
       }
     } catch (error) {
-      res.status(500).json({ error: "Erro ao buscar usuário" });
+      res.status(500).json({ error: "Erro ao buscar hospital" });
     }
   }
 
@@ -37,7 +37,7 @@ export class HospitalController {
         res.json(user);  
     } catch (error) {
       console.log(error)
-      res.status(500).json({ error: "Erro ao buscar usuário" });
+      res.status(500).json({ error: "Erro ao buscar hospitais" });
     }
   }
 

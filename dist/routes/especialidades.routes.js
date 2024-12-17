@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const especialidades_controller_1 = require("../controllers/especialidades.controller");
+const router = (0, express_1.Router)();
+const especialidadesController = new especialidades_controller_1.EspecialidadesController();
+router.post("/", especialidadesController.createEspecialidades.bind(especialidadesController));
+router.get("/:id", especialidadesController.getEspecialidades.bind(especialidadesController));
+router.get("/", especialidadesController.getEspecialidadess.bind(especialidadesController));
+exports.default = router;

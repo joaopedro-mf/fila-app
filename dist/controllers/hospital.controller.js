@@ -12,7 +12,7 @@ class HospitalController {
             res.status(201).json(user);
         }
         catch (error) {
-            res.status(500).json({ error: "Erro ao criar usuário" });
+            res.status(500).json({ error: "Erro ao criar hospital" });
         }
     }
     async getHospital(req, res) {
@@ -23,11 +23,11 @@ class HospitalController {
                 res.json(user);
             }
             else {
-                res.status(404).json({ error: "Usuário não encontrado" });
+                res.status(404).json({ error: "Hospital não encontrado" });
             }
         }
         catch (error) {
-            res.status(500).json({ error: "Erro ao buscar usuário" });
+            res.status(500).json({ error: "Erro ao buscar hospital" });
         }
     }
     async getHospitals(req, res) {
@@ -37,7 +37,7 @@ class HospitalController {
         }
         catch (error) {
             console.log(error);
-            res.status(500).json({ error: "Erro ao buscar usuário" });
+            res.status(500).json({ error: "Erro ao buscar hospitais" });
         }
     }
 }

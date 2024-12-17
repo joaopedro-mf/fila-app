@@ -13,3 +13,7 @@ import {
     descricao: string
     necessitaEncaminhamento: boolean
   }
+
+      export type Especialidades = Selectable<EspecialidadesTable>
+      export type NewEspecialidades = Insertable<EspecialidadesTable>
+      export type EspecialidadesUpdate = Updateable<EspecialidadesTable>

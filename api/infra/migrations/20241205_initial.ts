@@ -24,6 +24,10 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('dataNascimento', 'date')
     .addColumn('email', 'varchar(100)', (col) => col.notNull())
     .addColumn('numeroCartaoOperadora', 'varchar(50)', (col) => col.notNull())
+    .addColumn('cep', 'varchar(50)', (col) => col.notNull())
+    .addColumn('endereco', 'varchar(50)', (col) => col.notNull())
+    .addColumn('numeroEndereco', 'varchar(5)', (col) => col.notNull())
+    .addColumn('telefone', 'varchar(15)', (col) => col.notNull())
     .addColumn('status', 'varchar(50)', (col) => col.notNull())
     .addColumn('ativo', 'boolean', (col) => col.notNull())
     .addColumn('operadoraId', 'serial', (col) => 

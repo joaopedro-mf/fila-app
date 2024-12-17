@@ -14,3 +14,7 @@ import {
     registroANS: string
     ativado: boolean
   }
+
+    export type OperadoraPlanoSaude = Selectable<OperadoraPlanoSaudeTable>
+    export type NewOperadoraPlanoSaude = Insertable<OperadoraPlanoSaudeTable>
+    export type OperadoraPlanoSaudeUpdate = Updateable<OperadoraPlanoSaudeTable>
