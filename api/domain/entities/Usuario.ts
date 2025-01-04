@@ -22,6 +22,9 @@ import {
     numeroEndereco: string
     complementoEndereco: string
     telefone: string
+    biometriaDocumentoId: string
+    identificacaoDocumentoId: string
+    carteiraDocumentoId: string
   }
 
   export type Usuario = Selectable<UsuarioTable>

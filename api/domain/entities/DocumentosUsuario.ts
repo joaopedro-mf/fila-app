@@ -7,11 +7,14 @@ import {
     Updateable,
   } from 'kysely'
 
-  export interface DocumentosUsuarioTable {
+  export interface DocumentosTable {
     id: Generated<number>
     usuarioId: number
-    biometria: Buffer
-    documentoIdentificacao: Buffer
-    carteiraConvenio: Buffer
+    tipo: number
     dataCriacao: ColumnType<Date, string | undefined, never>
+    data: Text
   }
+
+  export type DocumentosUsuario = Selectable<DocumentosTable>
+  export type NewDocumentosUsuario= Insertable<DocumentosTable>
+  export type DocumentosUsuarioUpdate = Updateable<DocumentosTable>

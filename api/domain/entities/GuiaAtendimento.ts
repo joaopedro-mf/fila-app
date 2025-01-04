@@ -16,4 +16,9 @@ import {
     dataValidade: ColumnType<Date, string | undefined, never>
     statusGuia: string
     autorizadorResponsavel: string
+    assinatura:string
   }
+
+  export type Guia = Selectable<GuiaAtendimentoTable>
+  export type NewGuia = Insertable<GuiaAtendimentoTable>
+  export type UpdateGuia = Updateable<GuiaAtendimentoTable>

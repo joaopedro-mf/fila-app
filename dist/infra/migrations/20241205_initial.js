@@ -41,9 +41,8 @@ async function up(db) {
         .createTable('DocumentosUsuario')
         .addColumn('id', 'serial', (col) => col.primaryKey())
         .addColumn('usuarioId', 'serial', (col) => col.references('Usuario.id').onDelete('cascade').notNull())
-        .addColumn('biometria', 'bytea', (col) => col.notNull())
-        .addColumn('documentoIdentificacao', 'bytea', (col) => col.notNull())
-        .addColumn('carteiraConvenio', 'bytea', (col) => col.notNull())
+        .addColumn('tipo', 'varchar(50)', (col) => col.notNull())
+        .addColumn('data', 'bytea', (col) => col.notNull())
         .addColumn('dataCriacao', 'date', (col) => col.notNull())
         .execute();
     await db.schema
@@ -91,12 +90,13 @@ async function up(db) {
         .addColumn('usuarioId', 'serial', (col) => col.references('Usuario.id').onDelete('cascade').notNull())
         .addColumn('hospitalId', 'serial', (col) => col.references('Hospital.id').onDelete('cascade').notNull())
         .addColumn('operadoraId', 'serial', (col) => col.references('OperadoraPlanoSaude.id').onDelete('cascade').notNull())
+        .addColumn('especialidadeId', 'serial', (col) => col.references('Especialidades.id').onDelete('cascade').notNull())
         .addColumn('dataSolicitacao', 'date', (col) => col.notNull())
         .addColumn('statusAutorizacao', 'varchar(50)', (col) => col.notNull())
-        .addColumn('valorAutorizado', 'decimal', (col) => col.notNull())
-        .addColumn('documentosAnexos', 'json', (col) => col.notNull())
-        .addColumn('biometria', 'bytea', (col) => col.notNull())
-        .addColumn('descricaoPedido', 'varchar(100)', (col) => col.notNull())
+        .addColumn('valorAutorizado', 'decimal')
+        .addColumn('documentosAnexos', 'json')
+        .addColumn('biometria', 'bytea')
+        .addColumn('descricaoPedido', 'varchar(100)')
         .execute();
     await db.schema
         .createTable('GuiaAtendimento')

@@ -5,16 +5,16 @@ INSERT INTO "OperadoraPlanoSaude" ("id", "nomeSocial", "cnpj", "registroANS", "a
 (3, 'Bem Estar', '11223344000100', 'ANS11223', false);
 
 -- Inserção de dados na tabela Usuario
-INSERT INTO "Usuario" ("id", "nome", "numeroCPF", "dataNascimento", "email", "numeroCartaoOperadora", "status", "ativo", "operadoraId") VALUES
-(1, 'João Silva', '12345678901', '1985-05-20', 'joao.silva@email.com', '12345', 'Ativo', true, 1),
-(2, 'Maria Oliveira', '98765432100', '1990-08-15', 'maria.oliveira@email.com', '67890', 'Inativo', false, 2),
-(3, 'Carlos Pereira', '11122233344', '1975-12-10', 'carlos.pereira@email.com', '11223', 'Ativo', true, 3);
+INSERT INTO "Usuario" ("id", "nome", "numeroCPF", "dataNascimento", "email", "numeroCartaoOperadora", "cep", "endereco", "numeroEndereco", "telefone","status", "ativo", "operadoraId") VALUES
+(1, 'João Silva', '12345678901', '1985-05-20', 'joao.silva@email.com', '12345','31333560', 'rua', '2', '31999999999',  'Ativo', true, 1),
+(2, 'Maria Oliveira', '98765432100', '1990-08-15', 'maria.oliveira@email.com', '67890','31333560', 'rua', '2', '31999999999', 'Inativo', false, 2),
+(3, 'Carlos Pereira', '11122233344', '1975-12-10', 'carlos.pereira@email.com', '11223','31333560', 'rua', '2', '31999999999', 'Ativo', true, 3);
 
 -- Inserção de dados na tabela DocumentosUsuario
-INSERT INTO "DocumentosUsuario" ("id", "usuarioId", "biometria", "documentoIdentificacao", "carteiraConvenio", "dataCriacao") VALUES
-(1, 1, E'\\x62696f6d657472696131', E'\\x646f6331', E'\\x63617274616f31', '2024-01-01'),
-(2, 2, E'\\x62696f6d657472696132', E'\\x646f6332', E'\\x63617274616f32', '2024-01-02'),
-(3, 3, E'\\x62696f6d657472696133', E'\\x646f6333', E'\\x63617274616f33', '2024-01-03');
+INSERT INTO "DocumentosUsuario" ("id", "usuarioId", "tipo", "data","dataCriacao") VALUES
+(1, 1, 'biometria', E'\\x646f6331', '2024-01-01'),
+(2, 2, 'carteiraIdentificacao', E'\\x646f6332', '2024-01-02'),
+(3, 3, 'carteiraOperadora', E'\\x646f6333', '2024-01-03');
 
 -- Inserção de dados na tabela Hospital
 INSERT INTO "Hospital" ("id", "nome", "cnpj", "endereco", "ativo") VALUES
@@ -41,10 +41,10 @@ INSERT INTO "OperadorasPorHospital" ("id", "hospitalId", "operadoraId", "disponi
 (3, 3, 3, 0);
 
 -- Inserção de dados na tabela Autorizacao
-INSERT INTO "Autorizacao" ("id", "usuarioId", "hospitalId", "operadoraId", "dataSolicitacao", "statusAutorizacao", "valorAutorizado", "documentosAnexos", "biometria", "descricaoPedido") VALUES
-(1, 1, 1, 1, '2024-12-01', 'Aprovado', 150.75, '{"doc1": "file1.pdf"}'::json, E'\\x62696f6d657472696131', 'Consulta cardiológica'),
-(2, 2, 2, 2, '2024-12-02', 'Pendente', 0.0, '{"doc2": "file2.pdf"}'::json, E'\\x62696f6d657472696132', 'Exame de sangue'),
-(3, 3, 3, 3, '2024-12-03', 'Negado', 0.0, '{"doc3": "file3.pdf"}'::json, E'\\x62696f6d657472696133', 'Consulta ortopédica');
+INSERT INTO "Autorizacao" ("id", "usuarioId", "hospitalId", "operadoraId", "especialidadeId", "dataSolicitacao", "statusAutorizacao", "valorAutorizado") VALUES
+(1, 1, 1, 1, 1, '2024-12-01', 'Aprovado', 150.75),
+(2, 2, 2, 2, 1,'2024-12-02', 'Pendente', 0.0),
+(3, 3, 3, 3, 1,'2024-12-03', 'Negado', 0.0);
 
 -- Inserção de dados na tabela GuiaAtendimento
 INSERT INTO "GuiaAtendimento" ("id", "autorizacaoId", "identificadorGuia", "tokenQrCode", "dataEmissao", "dataValidade", "statusGuia", "autorizadorResponsavel") VALUES

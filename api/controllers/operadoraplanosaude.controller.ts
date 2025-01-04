@@ -36,7 +36,6 @@ export class OperadoraPlanoSaudeController {
       const user = await this.OperadoraPlanoSaudeRepository.getAllOperadoraPlanoSaudes();
         res.json(user);  
     } catch (error) {
-      console.log(error)
       res.status(500).json({ error: "Erro ao buscar planos de saúde" });
     }
   }

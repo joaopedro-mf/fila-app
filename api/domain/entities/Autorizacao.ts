@@ -13,6 +13,7 @@ export interface AutorizacaoTable {
     usuarioId: number
     hospitalId: number
     operadoraId: number
+    especialidadeId: number
     dataSolicitacao: ColumnType<Date, string | undefined, never>
     statusAutorizacao: string
     valorAutorizado: number

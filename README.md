@@ -27,6 +27,8 @@ cd ./fila-app/utils
 docker build -t my-postgres .
 docker run -d --name postgres-container -p 5432:5432 my-postgres
 
+npm run migration
+
 ```
 
 * caso necessite de massa para testes, dentro da pasta utils existe o script *massa_teste.sql* que possui massa de testes inicial 
