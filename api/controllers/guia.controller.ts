@@ -8,8 +8,8 @@ import { NewDocumentoUsuario } from "../domain/entities/DocumentosUsuario";
 import { DocumentosRepository } from "../infra/repositories/documentoRepositorio";
 import  generateTokenQrCode  from "../domain/entities/QrCode"
 import { getTokenInfo } from "../middlewares/authMiddleware"
-import { generatePdf } from 'html-pdf-node';
-import {GeneratePdfRequest, getGuiaDocumentTemplate } from '../domain/core/pdfTemplate'
+import PDFDocument from 'pdfkit';
+import {GuiaAutorizacaoPdf, gerarPDF } from '../domain/core/pdfTemplate'
 
 export class GuiaController {
   private guiaRepository: GuiaRepository;
@@ -132,23 +132,27 @@ export class GuiaController {
 
       const autorizacaoInfo = await this.guiaRepository.getGuiaByAutorizacao(autorizacaoSearch)
 
-      const pdfRequest: GeneratePdfRequest =
+      const pdfRequest: GuiaAutorizacaoPdf =
       {
         nomePaciente: autorizacaoInfo[0].nome,
-        plano: autorizacaoInfo[0].numeroCartaoOperadora,
+        numeroCartao: autorizacaoInfo[0].numeroCartaoOperadora,
         operadora: autorizacaoInfo[0].operadora,
         especialidade: autorizacaoInfo[0].especialidade,
-        dataEmissao: autorizacaoInfo[0].dataEmissao.toLocaleDateString('pt-BR')
+        data: autorizacaoInfo[0].dataEmissao.toLocaleDateString('pt-BR')
       }
-
-      const options = { format: 'A4' };
-      const file = { content: getGuiaDocumentTemplate(pdfRequest) };
-
-      const pdfBuffer = await generatePdf(file, options);
 
       res.setHeader('Content-Type', 'application/pdf');
       res.setHeader('Content-Disposition', 'attachment; filename=generated.pdf');
-      res.send(pdfBuffer);
+
+      gerarPDF(res,pdfRequest)
+      // const options = { format: 'A4' };
+      // const file = { content: getGuiaDocumentTemplate(pdfRequest) };
+
+      // const pdfBuffer = await htmlPdf.generatePdf(file, options);
+
+      // const pdfBuffer = await generatePdf(file, options);
+
+      // res.send(pdfBuffer);
 
     } catch (error) {
       console.log(error)

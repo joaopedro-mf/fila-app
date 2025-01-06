@@ -28,7 +28,7 @@ export class UsuarioController {
           "telefone": user.telefone,
           "status": user.status,
         }
-        res.json({response});
+        res.json(response);
       } else {
         res.status(404).json({ error: "Usuário não encontrado" });
       }
@@ -49,7 +49,7 @@ export class UsuarioController {
           dataToUpdate[key] = updateData[key];
         }
       });
-      
+
       var usuarioUpdate = await this.usuarioRepository.updateUsuario(req.body.tokenJwt.usuarioId, dataToUpdate)
 
       res.json(usuarioUpdate);  

@@ -24,7 +24,7 @@ class UsuarioController {
                     "telefone": user.telefone,
                     "status": user.status,
                 };
-                res.json({ response });
+                res.json(response);
             }
             else {
                 res.status(404).json({ error: "Usuário não encontrado" });

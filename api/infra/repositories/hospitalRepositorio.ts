@@ -30,8 +30,8 @@ export class HospitalRepository {
   async getAllHospitals(operadoraId: number) {
     let query = this._db.selectFrom('Hospital')
                         .innerJoin('OperadorasPorHospital', 'OperadorasPorHospital.operadoraId', 'Hospital.id')
-                        .select(['Hospital.id', 'Hospital.nome', 'Hospital.endereco'])
-                        .where('OperadorasPorHospital.operadoraId', '=', operadoraId);
+                        .where('OperadorasPorHospital.operadoraId', '=', operadoraId)
+                        .select(['Hospital.id', 'Hospital.nome', 'Hospital.endereco']);
     
     return await query.execute()
   }

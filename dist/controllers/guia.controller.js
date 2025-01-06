@@ -5,7 +5,6 @@ const guiaRepositorio_1 = require("../infra/repositories/guiaRepositorio");
 const documentoRepositorio_1 = require("../infra/repositories/documentoRepositorio");
 const QrCode_1 = require("../domain/entities/QrCode");
 const authMiddleware_1 = require("../middlewares/authMiddleware");
-const html_pdf_node_1 = require("html-pdf-node");
 const pdfTemplate_1 = require("../domain/core/pdfTemplate");
 class GuiaController {
     constructor() {
@@ -110,17 +109,19 @@ class GuiaController {
             const autorizacaoInfo = await this.guiaRepository.getGuiaByAutorizacao(autorizacaoSearch);
             const pdfRequest = {
                 nomePaciente: autorizacaoInfo[0].nome,
-                plano: autorizacaoInfo[0].numeroCartaoOperadora,
+                numeroCartao: autorizacaoInfo[0].numeroCartaoOperadora,
                 operadora: autorizacaoInfo[0].operadora,
                 especialidade: autorizacaoInfo[0].especialidade,
-                dataEmissao: autorizacaoInfo[0].dataEmissao.toLocaleDateString('pt-BR')
+                data: autorizacaoInfo[0].dataEmissao.toLocaleDateString('pt-BR')
             };
-            const options = { format: 'A4' };
-            const file = { content: (0, pdfTemplate_1.getGuiaDocumentTemplate)(pdfRequest) };
-            const pdfBuffer = await (0, html_pdf_node_1.generatePdf)(file, options);
             res.setHeader('Content-Type', 'application/pdf');
             res.setHeader('Content-Disposition', 'attachment; filename=generated.pdf');
-            res.send(pdfBuffer);
+            (0, pdfTemplate_1.gerarPDF)(res, pdfRequest);
+            // const options = { format: 'A4' };
+            // const file = { content: getGuiaDocumentTemplate(pdfRequest) };
+            // const pdfBuffer = await htmlPdf.generatePdf(file, options);
+            // const pdfBuffer = await generatePdf(file, options);
+            // res.send(pdfBuffer);
         }
         catch (error) {
             console.log(error);
