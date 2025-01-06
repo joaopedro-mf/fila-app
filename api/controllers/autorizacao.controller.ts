@@ -23,10 +23,10 @@ export class AutorizacaoController {
 
         // TODO: Buscar usuario e vincular sua operadora
         const autorizacao: NewAutorizacao = {
-            usuarioId: req.body.idUsuario,
+            usuarioId: req.body.tokenJwt.usuarioId,
             especialidadeId: req.body.especialidadeId,
             hospitalId: req.body.hospitalId,
-            operadoraId: 1, // TODO : PEGAR DO TOKEN 
+            operadoraId: req.body.tokenJwt.operadoraId,
             statusAutorizacao: AutorizacaoStatus.EmProcessamento.toString(),
             dataSolicitacao: currentDate.toISOString()
         };
@@ -42,19 +42,18 @@ export class AutorizacaoController {
 
         const guia: NewGuia = {
             autorizacaoId: createdAutorizacao.id,
-            identificadorGuia: simulatedRespondeOperadora.id,
             dataEmissao: currentDate.toISOString(),
             dataValidade: simulatedRespondeOperadora.dataValidade,
-            tokenQrCode: "", // TODO : Gerar string para codigo do token 
+            tokenQrCode: "",
             statusGuia: GuiaStatus.PendenteAssinatura.toString(), 
-            autorizadorResponsavel: autorizacao.operadoraId.toString() 
         };
 
-       await this.guiaRepository.createGuia(guia)
+      var guiaCreated =  await this.guiaRepository.createGuia(guia)
 
-       res.status(201).json(guia);
+       res.status(201).json(guiaCreated);
 
     } catch (error) {
+      console.log(error)
       res.status(500).json({ error: "Erro ao realizar autorizacao" });
     }
   }

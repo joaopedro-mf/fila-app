@@ -17,7 +17,7 @@ export class OperadoraPlanoSaudeController {
     }
   }
 
-  async getOperadoraPlanoSaude(req: Request, res: Response): Promise<void> {
+  async getOperadoraPlanoSaudeById(req: Request, res: Response): Promise<void> {
     try {
       const id = parseInt(req.params.id);
       const user = await this.OperadoraPlanoSaudeRepository.getOperadoraPlanoSaudeById(id);
@@ -31,11 +31,12 @@ export class OperadoraPlanoSaudeController {
     }
   }
 
-  async getOperadoraPlanoSaudes(req: Request, res: Response): Promise<void> {
+  async getOperadorasPlanoSaude(req: Request, res: Response): Promise<void> {
     try {
-      const user = await this.OperadoraPlanoSaudeRepository.getAllOperadoraPlanoSaudes();
-        res.json(user);  
+      const operadora = await this.OperadoraPlanoSaudeRepository.getAllOperadoraPlanoSaudes();
+        res.json(operadora);  
     } catch (error) {
+      console.log(error)
       res.status(500).json({ error: "Erro ao buscar planos de saúde" });
     }
   }

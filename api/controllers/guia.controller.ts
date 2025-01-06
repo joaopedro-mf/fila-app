@@ -1,28 +1,30 @@
 import { Request, Response } from "express";
 import { GuiaRepository } from "../infra/repositories/guiaRepositorio";
-import { AutorizacaoRepository } from "../infra/repositories/autorizacaoRepositorio";
-import { UpdateGuia } from "../domain/entities/GuiaAtendimento";
+import { Guia,UpdateGuia } from "../domain/entities/GuiaAtendimento";
 import { Autorizacao } from "../domain/entities/Autorizacao";
 import { GuiaStatus } from "../domain/Enums/GuiaStatus";
+import { DocumentoType } from "../domain/Enums/DocumentoType";
+import { NewDocumentoUsuario } from "../domain/entities/DocumentosUsuario";
+import { DocumentosRepository } from "../infra/repositories/documentoRepositorio";
+import  generateTokenQrCode  from "../domain/entities/QrCode"
+import { getTokenInfo } from "../middlewares/authMiddleware"
+import { generatePdf } from 'html-pdf-node';
+import {GeneratePdfRequest, getGuiaDocumentTemplate } from '../domain/core/pdfTemplate'
 
 export class GuiaController {
   private guiaRepository: GuiaRepository;
-  private autorizacaoRepository: AutorizacaoRepository;
+  private documentoRepository: DocumentosRepository;
+
 
   constructor() {
     this.guiaRepository = new GuiaRepository();
-    this.autorizacaoRepository = new AutorizacaoRepository();
+    this.documentoRepository = new DocumentosRepository();
   }
 
   async getGuiaByAutorizacao(req: Request, res: Response): Promise<void> {
     try {
-        const idUsuario = parseInt(req.query.idUsuario as string);
-
-        if(idUsuario == 0)
-            res.status(500).json({ error: "Erro ao buscar usuário" });
-
         const criteria: Partial<Autorizacao> = {
-            usuarioId : idUsuario
+            usuarioId : req.body.tokenJwt.usuarioId
         };
 
         const guia = await this.guiaRepository.getGuiaByAutorizacao(criteria);
@@ -40,6 +42,8 @@ export class GuiaController {
   async getGuiaById(req: Request, res: Response): Promise<void> {
     try {
       const id = parseInt(req.params.id);
+
+      // TODO: Atualizar status guia quando o data expiração for atingida
       const guia = await this.guiaRepository.getGuiaById(id);
       if (guia) {
         res.json(guia);
@@ -55,26 +59,46 @@ export class GuiaController {
     try {
       const id = parseInt(req.params.id);
 
-      if(!req.body.assinatura)
+      if(!req.body.documentoAssinadoBase64)
       {
         res.status(400).json({ error: "Assinatura não informada" })
         return
       }
 
-      //TODO: Realizar metodo que gera token QrCode
+      const currentDate: Date = new Date();
+
+      const assinatura: NewDocumentoUsuario ={
+        tipo: DocumentoType.Assinatura.toString(),
+        data: req.body.documentoAssinadoBase64, 
+        dataCriacao: currentDate.toISOString()
+        }
+      var assinaturaRef =  await this.documentoRepository.createDocument(assinatura)
+
+      const biometria: NewDocumentoUsuario ={
+        tipo: DocumentoType.Biometria.toString(),
+        data: req.body.selfie, 
+        dataCriacao: currentDate.toISOString()
+        }   
+      var biometriaRef =  await this.documentoRepository.createDocument(biometria)
+
+      const infoToken = getTokenInfo(req)
+
+      const tokenQrCode = generateTokenQrCode( infoToken.operadoraId, infoToken.usuarioId, id);
+
       const updateGuia: Partial<UpdateGuia> = {
         statusGuia : GuiaStatus.GeradoQrCode.toString(), 
-        assinatura : req.body.assinatura,
-        tokenQrCode: ""
+        assinaturaDocumentoId : assinaturaRef.id,
+        biometriaDocumentoId: biometriaRef.id,
+        tokenQrCode: tokenQrCode 
       };
       
       this.guiaRepository.updateGuia(id, updateGuia)
     
-      // TODO: Retornar string com codigo qrcode
-      res.status(200).json({ qrCode: "" });
+      res.status(200).json({ qrCode: tokenQrCode });
 
     } catch (error) {
-      res.status(500).json({ error: "Erro ao buscar usuário" });
+      console.log(error)
+      res.status(500).json({ error: "Erro ao confirmar guia" });
     }
   }
 
@@ -89,6 +113,46 @@ export class GuiaController {
       }
     } catch (error) {
       res.status(500).json({ error: "Erro ao buscar usuário" });
+    }
+  }
+
+  async getGuiaDocument(req: Request, res: Response):Promise<void>{
+    try {
+      const id = parseInt(req.params.id);
+      const guia = await this.guiaRepository.getGuiaById(id);
+
+      if (!guia) {
+        res.status(404).json({ error: "Usuário não encontrado" });
+        return
+      }
+
+      var autorizacaoSearch :Partial<Autorizacao> ={
+        id: guia.autorizacaoId
+      }
+
+      const autorizacaoInfo = await this.guiaRepository.getGuiaByAutorizacao(autorizacaoSearch)
+
+      const pdfRequest: GeneratePdfRequest =
+      {
+        nomePaciente: autorizacaoInfo[0].nome,
+        plano: autorizacaoInfo[0].numeroCartaoOperadora,
+        operadora: autorizacaoInfo[0].operadora,
+        especialidade: autorizacaoInfo[0].especialidade,
+        dataEmissao: autorizacaoInfo[0].dataEmissao.toLocaleDateString('pt-BR')
+      }
+
+      const options = { format: 'A4' };
+      const file = { content: getGuiaDocumentTemplate(pdfRequest) };
+
+      const pdfBuffer = await generatePdf(file, options);
+
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename=generated.pdf');
+      res.send(pdfBuffer);
+
+    } catch (error) {
+      console.log(error)
+      res.status(500).json({ error: "Erro ao gerar documento" });
     }
   }
 

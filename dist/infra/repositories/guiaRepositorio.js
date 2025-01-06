@@ -23,15 +23,29 @@ class GuiaRepository {
         return await query.selectAll().execute();
     }
     async getGuiaByAutorizacao(criteria) {
-        let query = this._db.selectFrom('GuiaAtendimento')
-            .innerJoin('Autorizacao', 'GuiaAtendimento.autorizacaoId', 'Autorizacao.id');
+        let query = this._db.selectFrom('Autorizacao')
+            .innerJoin('GuiaAtendimento', 'GuiaAtendimento.autorizacaoId', 'Autorizacao.id')
+            .innerJoin('Hospital', 'Hospital.id', 'Autorizacao.hospitalId')
+            .innerJoin('Especialidades', 'Especialidades.id', 'Autorizacao.especialidadeId')
+            .innerJoin("Usuario", 'Usuario.id', "Autorizacao.usuarioId")
+            .innerJoin("OperadoraPlanoSaude", "OperadoraPlanoSaude.id", "Autorizacao.operadoraId");
         if (criteria.id) {
-            query = query.where('id', '=', criteria.id);
+            query = query.where('Autorizacao.id', '=', criteria.id);
         }
         if (criteria.usuarioId) {
             query = query.where('usuarioId', '=', criteria.usuarioId);
         }
-        return await query.selectAll().execute();
+        // TODO: Fazer consulta com inner join na tabela de hospital e especialidade para acessar detalhes dos campos hospitalId e especialdiadeId
+        return await query
+            .select(["GuiaAtendimento.id",
+            "GuiaAtendimento.statusGuia",
+            "GuiaAtendimento.dataEmissao",
+            "Especialidades.nome as especialidade",
+            "Hospital.nome as hospital",
+            "Usuario.nome",
+            "Usuario.numeroCartaoOperadora",
+            "OperadoraPlanoSaude.nomeSocial as operadora"])
+            .execute();
     }
     async updateGuia(id, updateWith) {
         await database_1.db.updateTable('GuiaAtendimento')

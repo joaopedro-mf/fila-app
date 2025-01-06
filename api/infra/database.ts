@@ -3,7 +3,7 @@ import { Pool } from 'pg'
 import { Kysely, PostgresDialect } from 'kysely'
 
 import {AutorizacaoTable} from "../domain/entities/Autorizacao";
-import {DocumentosUsuarioTable} from "../domain/entities/DocumentosUsuario";
+import {DocumentosTable} from "../domain/entities/DocumentosUsuario";
 import {EspecialidadesTable} from "../domain/entities/Especialidades";
 import {EspecialidadesPorHospitalTable} from "../domain/entities/EspecialidadesPorHospital";
 import {GuiaAtendimentoTable} from "../domain/entities/GuiaAtendimento";
@@ -17,7 +17,7 @@ dotenv.config();
 export interface dbInterface {
   OperadoraPlanoSaude: OperadoraPlanoSaudeTable
   Usuario: UsuarioTable
-  DocumentosUsuario: DocumentosUsuarioTable
+  DocumentosUsuario: DocumentosTable
   Hospital: HospitalTable
   Especialidades: EspecialidadesTable
   EspecialidadesPorHospital: EspecialidadesPorHospitalTable

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { UsuarioRepository } from "../infra/repositories/usuarioRepositorio";
+import { UsuarioUpdate } from "../domain/entities/Usuario"
 
 export class UsuarioController {
   private usuarioRepository: UsuarioRepository;
@@ -8,21 +9,26 @@ export class UsuarioController {
     this.usuarioRepository = new UsuarioRepository();
   }
 
-  async createUsuario(req: Request, res: Response): Promise<void> {
-    try {
-      const user = null//await this.userService.createUser(req.body);
-      res.status(201).json(user);
-    } catch (error) {
-      res.status(500).json({ error: "Erro ao criar usuário" });
-    }
-  }
 
   async getUsuario(req: Request, res: Response): Promise<void> {
     try {
       const id = parseInt(req.params.id);
       const user = await this.usuarioRepository.getUsuarioById(id);
       if (user) {
-        res.json(user);
+        var response ={
+          "nome":user.nome,
+          "numeroCPF": user.numeroCPF,
+          "dataNascimento": user.dataNascimento,
+          "email": user.email,
+          "numeroCartaoOperadora": user.numeroCartaoOperadora,
+          "cep": user.cep,
+          "endereco": user.endereco,
+          "complementoEndereco": user.complementoEndereco,
+          "numeroEndereco": user.numeroEndereco,
+          "telefone": user.telefone,
+          "status": user.status,
+        }
+        res.json({response});
       } else {
         res.status(404).json({ error: "Usuário não encontrado" });
       }
@@ -31,10 +37,22 @@ export class UsuarioController {
     }
   }
 
-  async getUsuarios(req: Request, res: Response): Promise<void> {
+  async UpdateUsuarios(req: Request, res: Response): Promise<void> {
     try {
-      const user = await this.usuarioRepository.getAllUsuarios();
-        res.json(user);  
+
+      const dataToUpdate: Partial<UsuarioUpdate> = {};
+
+      var updateData = req.body
+      Object.keys(updateData).forEach(key => {
+        console.log(key)
+        if (updateData[key] !== undefined && key !== 'tokenJwt') {
+          dataToUpdate[key] = updateData[key];
+        }
+      });
+      
+      var usuarioUpdate = await this.usuarioRepository.updateUsuario(req.body.tokenJwt.usuarioId, dataToUpdate)
+
+      res.json(usuarioUpdate);  
     } catch (error) {
       res.status(500).json({ error: "Erro ao buscar usuário" });
     }

@@ -5,6 +5,6 @@ const operadoraplanosaude_controller_1 = require("../controllers/operadoraplanos
 const router = (0, express_1.Router)();
 const operadoraplanosaudeController = new operadoraplanosaude_controller_1.OperadoraPlanoSaudeController();
 router.post("/", operadoraplanosaudeController.createOperadoraPlanoSaude.bind(operadoraplanosaudeController));
-router.get("/:id", operadoraplanosaudeController.getOperadoraPlanoSaude.bind(operadoraplanosaudeController));
-router.get("/", operadoraplanosaudeController.getOperadoraPlanoSaude.bind(operadoraplanosaudeController));
+router.get("/:id", operadoraplanosaudeController.getOperadoraPlanoSaudeById.bind(operadoraplanosaudeController));
+router.get("/", operadoraplanosaudeController.getOperadorasPlanoSaude.bind(operadoraplanosaudeController));
 exports.default = router;

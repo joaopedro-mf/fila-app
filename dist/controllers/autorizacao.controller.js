@@ -14,11 +14,11 @@ class AutorizacaoController {
             const currentDate = new Date();
             // TODO: Buscar usuario e vincular sua operadora
             const autorizacao = {
-                usuarioId: req.body.idUsuario,
+                usuarioId: req.body.tokenJwt.usuarioId,
                 especialidadeId: req.body.especialidadeId,
                 hospitalId: req.body.hospitalId,
-                operadoraId: 1, // TODO : PEGAR DO TOKEN 
-                statusAutorizacao: 1 /* AutorizacaoStatus.EmProcessamento */.toString(),
+                operadoraId: req.body.tokenJwt.operadoraId,
+                statusAutorizacao: "Em processamento" /* AutorizacaoStatus.EmProcessamento */.toString(),
                 dataSolicitacao: currentDate.toISOString()
             };
             var createdAutorizacao = await this.autorizacaoRepository.createAutorizacao(autorizacao);
@@ -30,17 +30,16 @@ class AutorizacaoController {
             };
             const guia = {
                 autorizacaoId: createdAutorizacao.id,
-                identificadorGuia: simulatedRespondeOperadora.id,
                 dataEmissao: currentDate.toISOString(),
                 dataValidade: simulatedRespondeOperadora.dataValidade,
-                tokenQrCode: "", // TODO : Gerar string para codigo do token 
-                statusGuia: 1 /* GuiaStatus.PendenteAssinatura */.toString(),
-                autorizadorResponsavel: autorizacao.operadoraId.toString()
+                tokenQrCode: "",
+                statusGuia: "Pendente Assinatura" /* GuiaStatus.PendenteAssinatura */.toString(),
             };
-            await this.guiaRepository.createGuia(guia);
-            res.status(201).json(guia);
+            var guiaCreated = await this.guiaRepository.createGuia(guia);
+            res.status(201).json(guiaCreated);
         }
         catch (error) {
+            console.log(error);
             res.status(500).json({ error: "Erro ao realizar autorizacao" });
         }
     }

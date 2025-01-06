@@ -27,10 +27,13 @@ export class HospitalRepository {
     return await query.selectAll().execute()
   }
 
-  async getAllHospitals() {
+  async getAllHospitals(operadoraId: number) {
     let query = this._db.selectFrom('Hospital')
+                        .innerJoin('OperadorasPorHospital', 'OperadorasPorHospital.operadoraId', 'Hospital.id')
+                        .select(['Hospital.id', 'Hospital.nome', 'Hospital.endereco'])
+                        .where('OperadorasPorHospital.operadoraId', '=', operadoraId);
     
-    return await query.selectAll().execute()
+    return await query.execute()
   }
 
   async updatePerson(id: number, updateWith: HospitalUpdate) {

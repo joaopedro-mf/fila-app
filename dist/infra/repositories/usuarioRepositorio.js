@@ -14,25 +14,28 @@ class UsuarioRepository {
     }
     async getUsuario(criteria) {
         let query = this._db.selectFrom('Usuario');
-        if (criteria.id) {
-            query = query.where('id', '=', criteria.id);
+        if (criteria.numeroCPF) {
+            query = query.where('numeroCPF', '=', criteria.numeroCPF);
         }
-        return await query.selectAll().execute();
+        return await query.selectAll().executeTakeFirst();
     }
     async getAllUsuarios() {
         let query = this._db.selectFrom('Usuario');
         return await query.selectAll().execute();
     }
-    async updatePerson(id, updateWith) {
-        await database_1.db.updateTable('Usuario').set(updateWith).where('id', '=', id).execute();
+    async updateUsuario(id, updateWith) {
+        await database_1.db.updateTable('Usuario')
+            .set(updateWith)
+            .where('id', '=', id)
+            .executeTakeFirst();
     }
-    async createPerson(person) {
+    async createUsuario(person) {
         return await database_1.db.insertInto('Usuario')
             .values(person)
             .returningAll()
             .executeTakeFirstOrThrow();
     }
-    async deletePerson(id) {
+    async deleteUsuario(id) {
         return await database_1.db.deleteFrom('Usuario').where('id', '=', id)
             .returningAll()
             .executeTakeFirst();

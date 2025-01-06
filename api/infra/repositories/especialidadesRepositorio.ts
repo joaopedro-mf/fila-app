@@ -27,10 +27,19 @@ export class EspecialidadesRepository {
     return await query.selectAll().execute()
   }
 
-  async getAllEspecialidadess() {
+  async getAllEspecialidades() {
     let query = this._db.selectFrom('Especialidades')
     
     return await query.selectAll().execute()
+  }
+
+  async getAllEspecialidadesPorHospital(hospitalId: number) {
+    let query = this._db.selectFrom('Especialidades')
+    .innerJoin('EspecialidadesPorHospital', 'EspecialidadesPorHospital.especialidadeId', 'Especialidades.id')
+    .select(['Especialidades.id', 'Especialidades.nome', 'Especialidades.descricao', 'Especialidades.necessitaEncaminhamento'])
+    .where('EspecialidadesPorHospital.hospitalId', '=', hospitalId);
+
+    return await query.execute();
   }
 
   async updatePerson(id: number, updateWith: EspecialidadesUpdate) {

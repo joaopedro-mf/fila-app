@@ -6,21 +6,25 @@ class UsuarioController {
     constructor() {
         this.usuarioRepository = new usuarioRepositorio_1.UsuarioRepository();
     }
-    async createUsuario(req, res) {
-        try {
-            const user = null; //await this.userService.createUser(req.body);
-            res.status(201).json(user);
-        }
-        catch (error) {
-            res.status(500).json({ error: "Erro ao criar usuário" });
-        }
-    }
     async getUsuario(req, res) {
         try {
             const id = parseInt(req.params.id);
             const user = await this.usuarioRepository.getUsuarioById(id);
             if (user) {
-                res.json(user);
+                var response = {
+                    "nome": user.nome,
+                    "numeroCPF": user.numeroCPF,
+                    "dataNascimento": user.dataNascimento,
+                    "email": user.email,
+                    "numeroCartaoOperadora": user.numeroCartaoOperadora,
+                    "cep": user.cep,
+                    "endereco": user.endereco,
+                    "complementoEndereco": user.complementoEndereco,
+                    "numeroEndereco": user.numeroEndereco,
+                    "telefone": user.telefone,
+                    "status": user.status,
+                };
+                res.json({ response });
             }
             else {
                 res.status(404).json({ error: "Usuário não encontrado" });
@@ -30,10 +34,18 @@ class UsuarioController {
             res.status(500).json({ error: "Erro ao buscar usuário" });
         }
     }
-    async getUsuarios(req, res) {
+    async UpdateUsuarios(req, res) {
         try {
-            const user = await this.usuarioRepository.getAllUsuarios();
-            res.json(user);
+            const dataToUpdate = {};
+            var updateData = req.body;
+            Object.keys(updateData).forEach(key => {
+                console.log(key);
+                if (updateData[key] !== undefined && key !== 'tokenJwt') {
+                    dataToUpdate[key] = updateData[key];
+                }
+            });
+            var usuarioUpdate = await this.usuarioRepository.updateUsuario(req.body.tokenJwt.usuarioId, dataToUpdate);
+            res.json(usuarioUpdate);
         }
         catch (error) {
             res.status(500).json({ error: "Erro ao buscar usuário" });

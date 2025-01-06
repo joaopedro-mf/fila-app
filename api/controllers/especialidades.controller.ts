@@ -20,9 +20,9 @@ export class EspecialidadesController {
   async getEspecialidades(req: Request, res: Response): Promise<void> {
     try {
       const id = parseInt(req.params.id);
-      const user = await this.EspecialidadesRepository.getEspecialidadesById(id);
-      if (user) {
-        res.json(user);
+      const especialidade = await this.EspecialidadesRepository.getEspecialidadesById(id);
+      if (especialidade) {
+        res.json(especialidade);
       } else {
         res.status(404).json({ error: "Especialidade não encontrado" });
       }
@@ -33,8 +33,22 @@ export class EspecialidadesController {
 
   async getEspecialidadess(req: Request, res: Response): Promise<void> {
     try {
-      const user = await this.EspecialidadesRepository.getAllEspecialidadess();
-        res.json(user);  
+      const hospitalId = parseInt(req.query?.hospitalId?.toString());
+      
+      const especialidade = !hospitalId || hospitalId == 0 ? await this.EspecialidadesRepository.getAllEspecialidades() : 
+                                          await this.EspecialidadesRepository.getAllEspecialidadesPorHospital(hospitalId);
+
+      res.json(especialidade);  
+    } catch (error) {
+      res.status(500).json({ error: "Erro ao buscar especialidade" });
+    }
+  }
+
+    async getEspecialidadesPorHospital(req: Request, res: Response): Promise<void> {
+    try {
+      const hospitalId = parseInt(req.params.hospitalId);
+      const especialidade = await this.EspecialidadesRepository.getAllEspecialidadesPorHospital(hospitalId);
+        res.json(especialidade);  
     } catch (error) {
       res.status(500).json({ error: "Erro ao buscar especialidade" });
     }

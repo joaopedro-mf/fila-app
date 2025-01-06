@@ -10,13 +10,13 @@ import {
   export interface GuiaAtendimentoTable {
     id: Generated<number>
     autorizacaoId: number
-    identificadorGuia: string
     tokenQrCode: string
     dataEmissao: ColumnType<Date, string | undefined, never>
     dataValidade: ColumnType<Date, string | undefined, never>
     statusGuia: string
-    autorizadorResponsavel: string
     assinatura:string
+    biometriaDocumentoId:number
+    assinaturaDocumentoId:number
   }
 
   export type Guia = Selectable<GuiaAtendimentoTable>

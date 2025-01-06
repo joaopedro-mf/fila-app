@@ -19,9 +19,16 @@ class EspecialidadesRepository {
         }
         return await query.selectAll().execute();
     }
-    async getAllEspecialidadess() {
+    async getAllEspecialidades() {
         let query = this._db.selectFrom('Especialidades');
         return await query.selectAll().execute();
+    }
+    async getAllEspecialidadesPorHospital(hospitalId) {
+        let query = this._db.selectFrom('Especialidades')
+            .innerJoin('EspecialidadesPorHospital', 'EspecialidadesPorHospital.especialidadeId', 'Especialidades.id')
+            .select(['Especialidades.id', 'Especialidades.nome', 'Especialidades.descricao', 'Especialidades.necessitaEncaminhamento'])
+            .where('EspecialidadesPorHospital.hospitalId', '=', hospitalId);
+        return await query.execute();
     }
     async updatePerson(id, updateWith) {
         await database_1.db.updateTable('Especialidades').set(updateWith).where('id', '=', id).execute();

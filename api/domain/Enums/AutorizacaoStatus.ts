@@ -1,5 +1,5 @@
 export const enum AutorizacaoStatus {
-    EmProcessamento = 1,
-    Expirada,
-    Finalizada
+    EmProcessamento = 'Em processamento',
+    Expirada= 'Expirado',
+    Finalizada = 'Finalizado'
   }

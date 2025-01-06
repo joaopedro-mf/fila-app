@@ -15,7 +15,7 @@ class OperadoraPlanoSaudeController {
             res.status(500).json({ error: "Erro ao criar plano de saúde" });
         }
     }
-    async getOperadoraPlanoSaude(req, res) {
+    async getOperadoraPlanoSaudeById(req, res) {
         try {
             const id = parseInt(req.params.id);
             const user = await this.OperadoraPlanoSaudeRepository.getOperadoraPlanoSaudeById(id);
@@ -30,12 +30,13 @@ class OperadoraPlanoSaudeController {
             res.status(500).json({ error: "Erro ao buscar plano de saúde" });
         }
     }
-    async getOperadoraPlanoSaudes(req, res) {
+    async getOperadorasPlanoSaude(req, res) {
         try {
-            const user = await this.OperadoraPlanoSaudeRepository.getAllOperadoraPlanoSaudes();
-            res.json(user);
+            const operadora = await this.OperadoraPlanoSaudeRepository.getAllOperadoraPlanoSaudes();
+            res.json(operadora);
         }
         catch (error) {
+            console.log(error);
             res.status(500).json({ error: "Erro ao buscar planos de saúde" });
         }
     }

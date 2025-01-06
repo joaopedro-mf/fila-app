@@ -1,5 +1,5 @@
 export const enum GuiaStatus {
-    PendenteAssinatura = 1,
-    GeradoQrCode,
-    Finalizada
+    PendenteAssinatura = "Pendente Assinatura",
+    GeradoQrCode = "Gerado Qr Code",
+    Finalizada = "Finalizado"
   }

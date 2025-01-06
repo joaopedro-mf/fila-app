@@ -20,11 +20,11 @@ export class UsuarioRepository {
   async getUsuario(criteria: Partial<Usuario>) {
     let query = this._db.selectFrom('Usuario')
   
-    if (criteria.id) {
-      query = query.where('id', '=', criteria.id)
+    if (criteria.numeroCPF) {
+      query = query.where('numeroCPF', '=', criteria.numeroCPF)
     }
   
-    return await query.selectAll().execute()
+    return await query.selectAll().executeTakeFirst()
   }
 
   async getAllUsuarios() {
@@ -33,18 +33,21 @@ export class UsuarioRepository {
     return await query.selectAll().execute()
   }
 
-  async updatePerson(id: number, updateWith: UsuarioUpdate) {
-    await db.updateTable('Usuario').set(updateWith).where('id', '=', id).execute()
+  async updateUsuario(id: number, updateWith: Partial<UsuarioUpdate>) {
+    await db.updateTable('Usuario')
+            .set(updateWith)
+            .where('id', '=', id)
+            .executeTakeFirst()
   }
   
- async createPerson(person: NewUsuario) {
+ async createUsuario(person: NewUsuario) {
   return await db.insertInto('Usuario')
     .values(person)
     .returningAll()
     .executeTakeFirstOrThrow()
 }
 
-  async deletePerson(id: number) {
+  async deleteUsuario(id: number) {
     return await db.deleteFrom('Usuario').where('id', '=', id)
       .returningAll()
       .executeTakeFirst()

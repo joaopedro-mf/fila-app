@@ -9,12 +9,11 @@ import {
 
   export interface DocumentosTable {
     id: Generated<number>
-    usuarioId: number
-    tipo: number
+    tipo: string
     dataCriacao: ColumnType<Date, string | undefined, never>
-    data: Text
+    data: Buffer
   }
 
-  export type DocumentosUsuario = Selectable<DocumentosTable>
-  export type NewDocumentosUsuario= Insertable<DocumentosTable>
-  export type DocumentosUsuarioUpdate = Updateable<DocumentosTable>
+  export type DocumentoUsuario = Selectable<DocumentosTable>
+  export type NewDocumentoUsuario= Insertable<DocumentosTable>
+  export type DocumentoUsuarioUpdate = Updateable<DocumentosTable>

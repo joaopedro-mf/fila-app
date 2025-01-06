@@ -5,10 +5,10 @@ INSERT INTO "OperadoraPlanoSaude" ("id", "nomeSocial", "cnpj", "registroANS", "a
 (3, 'Bem Estar', '11223344000100', 'ANS11223', false);
 
 -- Inserção de dados na tabela Usuario
-INSERT INTO "Usuario" ("id", "nome", "numeroCPF", "dataNascimento", "email", "numeroCartaoOperadora", "cep", "endereco", "numeroEndereco", "telefone","status", "ativo", "operadoraId") VALUES
-(1, 'João Silva', '12345678901', '1985-05-20', 'joao.silva@email.com', '12345','31333560', 'rua', '2', '31999999999',  'Ativo', true, 1),
-(2, 'Maria Oliveira', '98765432100', '1990-08-15', 'maria.oliveira@email.com', '67890','31333560', 'rua', '2', '31999999999', 'Inativo', false, 2),
-(3, 'Carlos Pereira', '11122233344', '1975-12-10', 'carlos.pereira@email.com', '11223','31333560', 'rua', '2', '31999999999', 'Ativo', true, 3);
+INSERT INTO "Usuario" ("id", "nome", "numeroCPF", "dataNascimento", "email", "numeroCartaoOperadora", "cep", "endereco", "numeroEndereco", "telefone","status", "ativo", "operadoraId", "password") VALUES
+(1, 'João Silva', '12345678901', '1985-05-20', 'joao.silva@email.com', '12345','31333560', 'rua', '2', '31999999999',  'Ativo', true, 1, 'teste'),
+(2, 'Maria Oliveira', '98765432100', '1990-08-15', 'maria.oliveira@email.com', '67890','31333560', 'rua', '2', '31999999999', 'Inativo', false, 2, 'teste'),
+(3, 'Carlos Pereira', '11122233344', '1975-12-10', 'carlos.pereira@email.com', '11223','31333560', 'rua', '2', '31999999999', 'Ativo', true, 3, 'teste');
 
 -- Inserção de dados na tabela DocumentosUsuario
 INSERT INTO "DocumentosUsuario" ("id", "usuarioId", "tipo", "data","dataCriacao") VALUES

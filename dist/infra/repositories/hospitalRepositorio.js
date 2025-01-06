@@ -19,9 +19,12 @@ class HospitalRepository {
         }
         return await query.selectAll().execute();
     }
-    async getAllHospitals() {
-        let query = this._db.selectFrom('Hospital');
-        return await query.selectAll().execute();
+    async getAllHospitals(operadoraId) {
+        let query = this._db.selectFrom('Hospital')
+            .innerJoin('OperadorasPorHospital', 'OperadorasPorHospital.operadoraId', 'Hospital.id')
+            .select(['Hospital.id', 'Hospital.nome', 'Hospital.endereco'])
+            .where('OperadorasPorHospital.operadoraId', '=', operadoraId);
+        return await query.execute();
     }
     async updatePerson(id, updateWith) {
         await database_1.db.updateTable('Hospital').set(updateWith).where('id', '=', id).execute();

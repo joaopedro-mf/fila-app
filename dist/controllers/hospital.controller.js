@@ -32,8 +32,9 @@ class HospitalController {
     }
     async getHospitals(req, res) {
         try {
-            const user = await this.HospitalRepository.getAllHospitals();
-            res.json(user);
+            console.log(req.body.tokenJwt.operadoraId);
+            const hospitais = await this.HospitalRepository.getAllHospitals(req.body.tokenJwt.operadoraId);
+            res.json(hospitais);
         }
         catch (error) {
             res.status(500).json({ error: "Erro ao buscar hospitais" });

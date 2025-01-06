@@ -14,17 +14,19 @@ import {
     dataNascimento: ColumnType<Date, string | undefined, never>
     email: string
     numeroCartaoOperadora: string
-    status: string
     ativo: boolean
+    status: string
     operadoraId: number
     cep: string
     endereco: string
     numeroEndereco: string
     complementoEndereco: string
     telefone: string
-    biometriaDocumentoId: string
-    identificacaoDocumentoId: string
-    carteiraDocumentoId: string
+    comprovanteResidenciaDocumentoId: number
+    identificacaoDocumentoId: number
+    carteiraDocumentoId: number
+    imagemPerfil: number
+    password: string
   }
 
   export type Usuario = Selectable<UsuarioTable>

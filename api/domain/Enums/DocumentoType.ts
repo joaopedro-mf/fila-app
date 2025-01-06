@@ -1,6 +1,8 @@
-export const enum AutorizacaoStatus {
+export const enum DocumentoType {
     Assinatura = 1,
     Biometria,
     CarteiraConvenio,
-    CarteiraIdentificacao
+    CarteiraIdentificacao,
+    ComprovanteResidencia,
+    ImagemPerfil
   }
