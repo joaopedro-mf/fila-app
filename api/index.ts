@@ -17,7 +17,7 @@ app.use(express.json());
 app.use('/login', loginRoutes);
 app.use('/operadoras', operadoraplanosaudeRoutes);
 
-//app.use(authMiddleware);
+app.use(authMiddleware);
 
 app.use('/especialidades', especialidadesRoutes);
 app.use('/hospital', hospitalRoutes);
